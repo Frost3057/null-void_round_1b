@@ -1,0 +1,69 @@
+# Git and version control
+.git
+.gitignore
+.gitattributes
+
+# Python cache and build files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Documentation and README files (not needed in container)
+*.md
+docs/
+
+# Test and development files
+tests/
+test_*
+*_test.py
+
+# Logs and temporary files
+*.log
+tmp/
+temp/
+
+# Large model files (download at runtime if needed)
+multilingual_model/*.safetensors
+multilingual_model/*.bin
+
+# Evaluation and output files (generated at runtime)
+evaluation_report.json
+multilingual_validation_report.json

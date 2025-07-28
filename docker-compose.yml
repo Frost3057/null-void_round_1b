@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  # Production build with full functionality
+  adobe-hackathon-prod:
+    build:
+      context: .
+      dockerfile: dockerfile
+      target: application
+    container_name: adobe-hackathon-prod
+    volumes:
+      - ./input_1A:/app/input_1A:ro
+      - ./input_1B:/app/input_1B:ro
+      - ./output_1A:/app/output_1A
+      - ./output_1B:/app/output_1B
+      - ./multilingual_model:/app/multilingual_model:ro
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: ["python", "r1b_document_intelligence.py"]
+    
+  # Development build for quick testing
+  adobe-hackathon-dev:
+    build:
+      context: .
+      dockerfile: dockerfile.dev
+    container_name: adobe-hackathon-dev
+    volumes:
+      - .:/app
+      - /app/__pycache__  # Exclude cache from volume mount
+    environment:
+      - PYTHONUNBUFFERED=1
+      - LOG_LEVEL=DEBUG
+    command: ["python", "validate_multilingual.py", "--input_dir", "output_1A", "--detailed"]
+    
+  # Validation only service
+  validation:
+    build:
+      context: .
+      dockerfile: dockerfile.dev
+    container_name: adobe-validation
+    volumes:
+      - ./output_1A:/app/output_1A:ro
+      - ./output_1B:/app/output_1B:ro
+    command: ["python", "validate_multilingual.py", "--input_dir", "output_1A", "--detailed"]
+    
+  # Evaluation service
+  evaluation:
+    build:
+      context: .
+      dockerfile: dockerfile.dev
+    container_name: adobe-evaluation
+    volumes:
+      - ./output_1A:/app/output_1A:ro
+      - ./output_1B:/app/output_1B:ro
+      - ./ground_truth:/app/ground_truth:ro
+    command: ["python", "evaluate_accuracy.py", "--mode", "both", "--detailed"]
